@@ -7,3 +7,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/2Wgmqra4ZuDMex/personal-
 ```curl
 curl -fsSL https://raw.githubusercontent.com/lbjlaq/Antigravity-Manager/v4.1.23/install.sh | bash
 ```
+git
+```
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/2Wgmqra4ZuDMex/personal-script-repository/main/setup-git-user.sh)"
+```
