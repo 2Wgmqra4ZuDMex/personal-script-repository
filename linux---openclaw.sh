@@ -218,6 +218,18 @@ info "运行 openclaw doctor --fix 生成标准服务文件..."
 echo -e "${CYAN}（此步骤会修复版本显示、环境变量、网络依赖等配置）${NC}"
 openclaw doctor --fix 2>&1 || true
 
+# ----- 4a. 修复 tools.profile -----
+# onboard 默认设置 tools.profile="messaging"，导致文件/执行/Web 等工具不可用
+CURRENT_PROFILE=$(openclaw config get tools.profile 2>/dev/null || echo "unknown")
+if [ "$CURRENT_PROFILE" != "full" ]; then
+  info "修复工具配置：tools.profile '$CURRENT_PROFILE' → 'full'"
+  openclaw config set tools.profile full 2>/dev/null || true
+  success "已启用全部工具（文件读写、命令执行、Web 搜索等）"
+else
+  success "tools.profile 已经是 'full'"
+fi
+
+# ----- 4b. 重启 Gateway -----
 # doctor --fix 后需要重启服务以加载新配置
 if systemctl --user is-active openclaw-gateway.service &>/dev/null; then
   info "重启 Gateway 以加载新配置..."
@@ -232,7 +244,7 @@ else
   info "Gateway 未运行，跳过重启"
 fi
 
-success "doctor --fix 完成"
+success "服务配置修复完成"
 
 # ============================================================================
 # 完成
