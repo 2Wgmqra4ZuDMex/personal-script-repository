@@ -15,3 +15,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/2Wgmqra4ZuDMex/personal-
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/2Wgmqra4ZuDMex/personal-script-repository/main/update-antigravity.sh)"
 ```
+Linux-openclaw
+```curl
+curl -fsSL https://raw.githubusercontent.com/2Wgmqra4ZuDMex/personal-script-repository/main/linux---openclaw.sh -o /tmp/openclaw-deploy.sh && bash /tmp/openclaw-deploy.sh
+```
