@@ -16,6 +16,7 @@
 #   2. Bug #14845: SSH 环境下 systemd 服务文件不会被自动创建
 #   3. systemd user 会话延迟初始化
 #   4. Dashboard 版本显示 "dev"（通过 doctor --fix 修复）
+#   5. exec 命令卡住：elevatedDefault 默认为 "ask"，飞书端无审批入口
 #
 # 项目地址：https://github.com/2Wgmqra4ZuDMex/personal-script-repository
 # ============================================================================
@@ -229,7 +230,18 @@ else
   success "tools.profile 已经是 'full'"
 fi
 
-# ----- 4b. 重启 Gateway -----
+# ----- 4b. 修复 exec 提权审批 -----
+# elevated 默认为 "ask"，在飞书端无审批入口会导致 exec 命令卡住
+CURRENT_ELEVATED=$(openclaw config get agents.defaults.elevatedDefault 2>/dev/null || echo "")
+if [ "$CURRENT_ELEVATED" != "full" ]; then
+  info "修复 exec 审批：elevatedDefault '$CURRENT_ELEVATED' → 'full'"
+  openclaw config set agents.defaults.elevatedDefault full 2>/dev/null || true
+  success "已关闭 exec 命令审批（直接执行，不再卡住）"
+else
+  success "elevatedDefault 已经是 'full'"
+fi
+
+# ----- 4c. 重启 Gateway -----
 # doctor --fix 后需要重启服务以加载新配置
 if systemctl --user is-active openclaw-gateway.service &>/dev/null; then
   info "重启 Gateway 以加载新配置..."
